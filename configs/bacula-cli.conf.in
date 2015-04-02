@@ -1,0 +1,75 @@
+<TMPL_LOOP NAME=BACKUP_CLIENTS>
+#<TMPL_VAR NAME=HOST>
+Job {
+  Name = "<TMPL_VAR NAME=HOST>"
+  JobDefs = "DefJob"
+  Client = "<TMPL_VAR NAME=HOST>"
+  FileSet = "<TMPL_VAR NAME=HOST>"
+  Schedule = "DailyFDI-W<TMPL_VAR NAME=SCH>"
+  Write Bootstrap = "/www/backups2/working/<TMPL_VAR NAME=HOST>.bsr"
+}
+
+Client {
+  Name = "<TMPL_VAR NAME=HOST>"
+  Address = "<TMPL_VAR NAME=HOST>"
+  FDPort = 9102
+  Catalog = MyCatalog
+  Password = "<TMPL_VAR NAME=PASSWD>"          # password for FileDaemon
+  File Retention = 15 days            
+  Job Retention = 15 days             
+  AutoPrune = yes                     # Prune expired Jobs/Files
+}
+
+FileSet{
+        Name=<TMPL_VAR NAME=HOST>
+        Include{
+                Options{
+                        signature=MD5
+                        wilddir="*cache*"
+			                  wilddir="lost+found"
+                        Exclude = yes
+                }
+        @/etc/bacula/deffileset<TMPL_VAR NAME=NOWWW>.conf
+        <TMPL_VAR NAME=INCLUDE>
+        }
+        Exclude{
+                File = /www/db
+                File = /www/db2
+                File = /www/db-pgsql
+                File = /www/db-mysql
+		File = /www/tmp
+		File = /www/core
+		File = /www/logs
+		File = /usr/local/ports
+		File = /var/cache
+		File = /boot/kernel.old
+		File = /var/tmp/
+		File = /var/mail
+		File = /var/log/snmpd.log
+		File = /disk
+		File = /disk2
+		File = /disk3
+		File = /disk4
+		File = /disk5
+		File = /disk6
+		File = /disk6
+		File = /backup
+		File = /backus
+        <TMPL_VAR NAME=EXCLUDE>
+        }
+}
+
+Console{
+        Name=<TMPL_VAR NAME=HOST>
+        Password="123"
+        JobACL = <TMPL_VAR NAME=HOST>
+        ClientACL = <TMPL_VAR NAME=HOST>
+        FileSetACL = <TMPL_VAR NAME=HOST>
+        PoolACL = *all*
+        ScheduleACL = *all*
+        StorageACL = *all*
+        CatalogACL = *all*
+        CommandACL = *all*
+        WhereACL = /
+}
+</TMPL_LOOP>
