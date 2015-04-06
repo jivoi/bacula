@@ -1,0 +1,18 @@
+apt-get install nginx apache2-utils php5-fpm php5-mysql php5-gd
+
+ vi /etc/php5/fpm/php.ini
+ cgi.fix_pathinfo=0
+ date.timezone = Europe/Moscow
+ service php5-fpm restart
+
+
+ wget --content-disposition http://www.bacula-web.org/download.html?file=files/bacula-web.org/downloads/bacula-web-7.0.3.tgz
+
+mkdir bacula-web
+cd bacula-web
+tar xvf ../bacula-web-*.tgz
+
+cp config.php.sample config.php
+vi config.php
+
+http://server_public_IP/test.php
